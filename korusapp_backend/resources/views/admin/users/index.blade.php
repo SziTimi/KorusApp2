@@ -47,6 +47,7 @@
 
     <!-- Optional: Include JavaScript files if necessary -->
     <script src="path/to/your/javascript/file.js"></script>
+</div>
 </body>
 </html>
 
