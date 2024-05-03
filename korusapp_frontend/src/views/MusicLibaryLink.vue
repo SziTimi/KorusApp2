@@ -2,7 +2,7 @@
     <!-- Kottatár link -->
     <div>
       <a
-        href="https://drive.google.com/drive/folders/your-folder-id"
+        href=""
         target="_blank"
         >Kottatár megnyitása</a
       >

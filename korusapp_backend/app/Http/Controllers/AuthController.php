@@ -22,10 +22,6 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        $credentials = $request->validate([
-            'username' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
 
         if (Auth::attempt($request->validated())) {
             $request->session()->regenerate();
@@ -34,10 +30,7 @@ class AuthController extends Controller
             if (Auth::user()->role === 'admin') {
                 return redirect()->route('admin.index');
             } else {
-                return response()->json([
-                    'message' => 'Sikeres bejelentkezés',
-                    'user' => Auth::user()
-                ], 200);
+                return redirect()->route('user.index');
             }
 
 
@@ -47,7 +40,7 @@ class AuthController extends Controller
 
 
 
-    public function logout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
 
@@ -62,7 +55,7 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): RedirectResponse
     {
         $user = User::create($request->validated());
         //Auth::login($user);

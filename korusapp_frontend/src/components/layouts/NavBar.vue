@@ -1,7 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <router-link class="navbar-brand" to="/login">Bejelentkezés</router-link>
+    <div v-if="loggedIn" class="container">
       <button
         class="navbar-toggler"
         type="button"
@@ -40,24 +39,64 @@
           </li>
         </ul>
       </div>
+      <button @click="handleLogout">Kijelentkezés</button>
     </div>
   </nav>
 </template>
 
-<script setup>
+<script>
+import { isLoggedIn, logout } from "@/utils/http";
 
-import { RouterLink } from "vue-router";
-
+export default {
+  data() {
+    return {
+      loggedIn: false, // Kezdeti érték
+    };
+  },
+  created() {
+    this.loggedIn = isLoggedIn(); // Frissítjük a bejelentkezési állapotot
+  },
+  methods: {
+    handleLogout() {
+      logout();
+      this.loggedIn = false;
+      this.$router.push("/login");
+    },
+  },
+};
 </script>
 
 <style scoped>
 .container {
-  /* Navigációs sáv stílusai */
   background-color: grey;
   padding: 10px;
   text-align: center;
   margin: 0 auto;
-  text-decoration: none;
-  color: black;
+  color: white;
+  width: 100%;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+nav li {
+  display: inline-block;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+  }
+
+  nav li {
+    margin-bottom: 10px;
+  }
 }
 </style>

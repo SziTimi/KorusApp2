@@ -5,15 +5,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Event;
+use App\Models\SheetMusic;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class EventController extends Controller
 {
-    // Display a listing of the events
+
     public function index()
     {
-        $events = Event::all();
+       // $events = Event::all();
+        $events = Event::with('sheetMusic')->get(); // Include the related sheet music details
         return view('admin.events.index', compact('events'));
     }
 
@@ -48,17 +50,30 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $event = Event::with('sheetMusic')->findOrFail($id);
+        $sheetMusics = SheetMusic::all(); // Fetch all sheet music records
+        return view('admin.events.edit', compact('event', 'sheetMusics'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'event_time' => 'required|date',
+            'event_venue' => 'nullable|string|max:100',
+            'event_address' => 'nullable|string|max:100',
+            'sheet_music_id' => 'nullable|integer',
+            'additional_info' => 'nullable|string',
+        ]);
+
+        $event = Event::findOrFail($id);
+        $event->update($request->all());
+
+        return redirect()->route('admin.events.index')->with('success', 'Event updated successfully!');
     }
 
     /**

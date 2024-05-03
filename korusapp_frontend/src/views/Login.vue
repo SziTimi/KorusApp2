@@ -1,93 +1,87 @@
 <template>
-  <!-- Bejelentkezési űrlap -->
   <div class="login-form">
-    <form @submit.prevent="login" class="form">
-      <div class="form-group">
-        <label for="username">Felhasználónév:</label>
-        <input type="text" id="username" v-model="credentials.username" required class="form-control" />
-      </div>
-      <div class="form-group">
-        <label for="password">Jelszó:</label>
-        <input type="password" id="password" v-model="credentials.password" autocomplete="additional-name" required class="form-control" />
-      </div>
-      <button type="submit" class="btn btn-primary">Bejelentkezés</button>
-    </form>
+    <div class="form">
+      <h1>Bejelentkezés</h1>
+      <form @submit.prevent="handleLogin">
+        <div class="form-group">
+          <input type="text" placeholder="Felhasználónév" v-model="username" autocomplete="username" required>
+        </div>
+        <div class="form-group">
+          <input type="password" placeholder="Jelszó" v-model="password" autocomplete="current-password" required>
+        </div>
+        <button type="submit">Bejelentkezés</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
-import { http } from "@/utils/http";
+import { login } from '@/utils/http';
 
 export default {
-  name: "login",
   data() {
     return {
-      credentials: {
-        username: "",
-        password: "",
-      },
+      username: '',
+      password: ''
     };
   },
   methods: {
-    async login() {
-      try {
-        // Az API hívás
-        const response = await http.post("/login", this.credentials);
-        
-        // Ellenőrizzük a válasz státuszát
-        if (response.status === 200) {
-          console.log("Sikeres bejelentkezés", response.data);
-          // További logika, mint például átirányítás vagy állapot frissítése
-        } else {
-          console.error("Hibás válasz státusz", response.status);
-        }
-      } catch (error) {
-        console.error("Hiba a bejelentkezés során", error);
+    handleLogin() {
+      // Egyszerű ellenőrzés (ideiglenes)
+      if (this.username === 'admin' && this.password === 'admin') {
+        login(); // Bejelentkezett státusz beállítása
+        this.$router.push('/'); // Visszairányítás a főoldalra
+        alert('Sikeres bejelentkezés!');
+      } else {
+        alert('Hibás felhasználónév vagy jelszó!');
       }
-    },
-  },
-};
+    }
+  }
+  /*methods: {
+    handleLogin() {
+      // Ideális esetben itt egy API hívással ellenőrizzük a felhasználói adatokat
+      login(); // Egyszerűség kedvéért itt közvetlenül beállítjuk a bejelentkezett státuszt
+      this.$router.push('/'); // Visszairányítás a főoldalra
+    }
+  }*/
+}
 </script>
+
 
 <style scoped>
 .login-form {
-  max-width: 400px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .form {
   background-color: #81d0d0;
   padding: 20px;
   border-radius: 5px;
+  width: 100%;
+  max-width: 400px;
 }
 
 .form-group {
   margin-bottom: 15px;
 }
 
-label {
-  display: block;
-  font-weight: bold;
-}
-
-.form-control {
+input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 5px;
 }
 
 button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
+  width: 100%;
+  padding: 10px;
   border: none;
   border-radius: 5px;
+  background-color: #006060;
+  color: white;
   cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
 }
 </style>

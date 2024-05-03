@@ -1,5 +1,9 @@
-WELCOME TO THE MUSICA NOSTRA APPLICATION
+@extends('layouts.layout')
 
+@section('title', 'Üdv a kórus oldalon')
 
-<hr>
-<a href="{{ route('loginForm') }}">Belépés</a>
+@section('content')
+    <h1>ÜDV A KÓRUS OLDALÁN</h1>
+    <hr>
+    <a href="{{ route('loginForm') }}" class="btn btn-primary">Belépés</a>
+@endsection

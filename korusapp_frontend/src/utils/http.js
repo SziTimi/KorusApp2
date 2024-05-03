@@ -5,11 +5,24 @@ const http = axios.create({
     baseURL: "http://localhost:5173"
 });
 
-// Exportáljuk az http példányt
-export { http };
+// Autentikációs funkciók
+function isLoggedIn() {
+  return !!localStorage.getItem('loggedIn');
+}
 
-// Máshol aCz alkalmazásban, például egy Vue komponensben importáljuk és használjuk
-//import { http } from "@/utils/http"; // Importálás az http.js fájlból
+function login() {
+  localStorage.setItem('loggedIn', true);
+}
+
+function logout() {
+  localStorage.removeItem('loggedIn');
+}
+
+// Exportáljuk az http példányt és az autentikációs funkciókat
+export { http, isLoggedIn, login, logout };
+
+// Máshol az alkalmazásban, például egy Vue komponensben importáljuk és használjuk
+//import { http, login, logout, isLoggedIn } from "@/utils/http"; // Importálás az http.js fájlból
 
 //Példa egy API hívásra
 http.get('/login')
